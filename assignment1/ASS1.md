@@ -56,8 +56,9 @@ processes tells the total number of forks since boot.
 
 The top output:
 
-PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-14896 mentee    20   0    4384    716    652 R 100.0  0.0   0:38.78 cpu
+|PID|USER|PR|NI|VIRT|RES|SHR|S|%CPU|%MEM|TIME+|COMMAND|
+|---|----|--|--|----|---|---|-|----|----|-----|-------|
+|14896|mentee|20|0|4384|716|652|R|100.0|0.0|0:38.78|cpu|
 
 ## a)
 
