@@ -30,17 +30,17 @@ On the actual machine it shows the real time frequency of each processor, which 
 File used: `/proc/cpuinfo`
 Architecture is x86_64
 
-# f)
+## f)
 
 File used: `/proc/meminfo`
 Total physical memory which refers tho the amount of physical ram that system has is $4039356$ kB (approx 3.85 gB)
 
-# g)
+## g)
 
 File used: `/proc/meminfo`
 Of this the total free memory is $278436$ kB.
 
-# h)
+## h)
 
 File used: `/proc/stat`
 
