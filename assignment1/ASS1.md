@@ -93,5 +93,3 @@ Physical resident in memory (RSS): 3316
 ````
 
 Program uses significantly less Physical memory than virtual memory. i.e. it thinks it has a lot of address space available when actually loaded in RAM is significantly less.
-
-# Question 5
