@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,12 +56,15 @@ int execute(char **tokens) {
   } else if (rc == 0) {
     int exec_status = execvp(tokens[0], tokens);
     if (exec_status < 0) {
-      fprintf(stderr, "%s\n", explain_execvp(tokens[0], tokens));
+      // printf("execl returned! errno is [%d]\n", errno);
+      // perror("The error message is :");
+      perror(NULL);
     }
-    printf("exec_status: %d\n", exec_status);
+    // printf("exec_status: %d\n", exec_status);
     exit(exec_status);
   } else {
-    signal(SIGINT, signal_handler);
+    // enable the below if you don't want CTRL-C to close the shell
+    // signal(SIGINT, signal_handler);
     wait(NULL);
   }
 
