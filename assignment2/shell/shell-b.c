@@ -48,6 +48,7 @@ char **tokenize(char *line) {
 }
 
 int execute(char **tokens) {
+  int ws;
   int rc = fork();
 
   if (rc < 0) {
@@ -65,7 +66,11 @@ int execute(char **tokens) {
   } else {
     // enable the below if you don't want CTRL-C to close the shell
     // signal(SIGINT, signal_handler);
-    wait(NULL);
+    wait(&ws);
+
+    if (ws != 0) {
+      printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
+    }
   }
 
   return 0;
@@ -76,10 +81,19 @@ int main(int argc, char *argv[]) {
   char **tokens;
   char cd[] = "cd";
   int i;
+  char *cwd = (char *)malloc(257 * sizeof(char));
+  /*
+   */
 
   while (1) {
     /* BEGIN: TAKING INPUT */
     bzero(line, sizeof(line));
+    if (getcwd(cwd, 257) != NULL) {
+      printf("%s", cwd);
+    } else {
+      printf("failed to get current dir\n");
+      fprintf(stderr, "failed to get the current dir\n");
+    }
     printf("$ ");
     scanf("%[^\n]", line);
     getchar(); // this is for waiting till enter is pressed
@@ -91,7 +105,6 @@ int main(int argc, char *argv[]) {
 
     line[strlen(line)] = '\n'; // terminate with new line
     tokens = tokenize(line);
-
     /*
     for (i = 0; tokens[i] != NULL; i++) {
       printf("found token %s (remove this debug output later)\n", tokens[i]);
@@ -100,16 +113,12 @@ int main(int argc, char *argv[]) {
     if (tokens[0] == NULL) {
       // printf("you said null?\n");
     } else if ((strcmp(tokens[0], cd) == 0) && (tokens[1] != NULL)) {
-      chdir(tokens[1]);
 
-      // for debugging
-      /*
-  char *cwd = (char *)malloc(101 * sizeof(char));
-      if (getcwd(cwd, 101) != NULL) {
-        printf("current dir: %s\n", cwd);
+      // change the directory
+      if (chdir(tokens[1]) != -1) {
       } else {
-        printf("failed to get the current dir\n");
-      } */
+        perror(NULL); // if error print it
+      }
 
     } else {
       execute(tokens);

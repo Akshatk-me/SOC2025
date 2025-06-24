@@ -100,16 +100,20 @@ int main(int argc, char *argv[]) {
     if (tokens[0] == NULL) {
       // printf("you said null?\n");
     } else if ((strcmp(tokens[0], cd) == 0) && (tokens[1] != NULL)) {
-      chdir(tokens[1]);
+      if (chdir(tokens[1]) != -1) {
+      } else {
+        perror(NULL); // print the error
+      }
 
-      // for debugging
       /*
+      // for debugging
   char *cwd = (char *)malloc(101 * sizeof(char));
       if (getcwd(cwd, 101) != NULL) {
         printf("current dir: %s\n", cwd);
       } else {
         printf("failed to get the current dir\n");
-      } */
+      }
+      */
 
     } else {
       execute(tokens);
