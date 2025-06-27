@@ -79,7 +79,6 @@ int execute(char **tokens) {
 int main(int argc, char *argv[]) {
   char line[MAX_INPUT_SIZE];
   char **tokens;
-  char cd[] = "cd";
   int i;
   char *cwd = (char *)malloc(257 * sizeof(char));
   /*
@@ -112,7 +111,7 @@ int main(int argc, char *argv[]) {
 
     if (tokens[0] == NULL) {
       // printf("you said null?\n");
-    } else if ((strcmp(tokens[0], cd) == 0) && (tokens[1] != NULL)) {
+    } else if ((strcmp(tokens[0], "cd") == 0) && (tokens[1] != NULL)) {
 
       // change the directory
       if (chdir(tokens[1]) != -1) {

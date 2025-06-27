@@ -11,15 +11,13 @@
 #define MAX_TOKEN_SIZE 64
 #define MAX_NUM_TOKENS 64
 
+int pid;
+
 // signal handler
 volatile sig_atomic_t gSignalstatus;
 static void signal_handler(int signal) {
   gSignalstatus = signal;
-  if (signal == SIGCHLD) {
-    wait(NULL);
-  } else {
-    printf("Received signal: %d\n", signal);
-  }
+  printf("Received signal: %d\n", signal);
 }
 
 /* Splits the string by space and returns the array of tokens
@@ -67,18 +65,30 @@ int execute(char **tokens, int RunBackground) {
     printf("exec_status: %d\n", exec_status);
     exit(exec_status);
   } else {
+
     // enable the below if you don't want CTRL-C to close the shell
     // signal(SIGINT, signal_handler);
-    if (RunBackground == 0) {
-      wait(&ws);
 
+    // loop to kill any zombie process from foreground + the forked process
+    while ((pid = waitpid(-1, &ws, WNOHANG)) > 0) {
+      if (ws != 0) {
+        printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
+      }
+    }
+
+    if (RunBackground == 0) {
+
+      // printf("WILL be waiting for %d\n", rc);
+      wait(&ws);
       if (ws != 0) {
         printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
       }
 
+      // printf("WAS be waiting for %d\n", rc);
+
     } else {
       // the below will take care to eliminate the child when it dies
-      signal(SIGCHLD, signal_handler);
+      // signal(SIGCHLD, signal_handler);
       printf("Running in Background: %d\n", rc);
     }
   }
@@ -89,14 +99,15 @@ int execute(char **tokens, int RunBackground) {
 int main(int argc, char *argv[]) {
   char line[MAX_INPUT_SIZE];
   char **tokens;
-  char cd[] = "cd";
   int i;
+  int ws;
   int NUM_TOKENS;
   char *cwd = (char *)malloc(257 * sizeof(char));
   /*
    */
 
   while (1) {
+
     /* BEGIN: TAKING INPUT */
     bzero(line, sizeof(line));
     if (getcwd(cwd, 257) != NULL) {
@@ -125,7 +136,7 @@ int main(int argc, char *argv[]) {
 
     if (tokens[0] == NULL) {
       // printf("you said null?\n");
-    } else if ((strcmp(tokens[0], cd) == 0) && (tokens[1] != NULL)) {
+    } else if ((strcmp(tokens[0], "cd") == 0) && (tokens[1] != NULL)) {
 
       // change the directory
       if (chdir(tokens[1]) != -1) {

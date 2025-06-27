@@ -74,7 +74,6 @@ int execute(char **tokens) {
 int main(int argc, char *argv[]) {
   char line[MAX_INPUT_SIZE];
   char **tokens;
-  char cd[] = "cd";
   int i;
 
   while (1) {
@@ -99,7 +98,7 @@ int main(int argc, char *argv[]) {
 
     if (tokens[0] == NULL) {
       // printf("you said null?\n");
-    } else if ((strcmp(tokens[0], cd) == 0) && (tokens[1] != NULL)) {
+    } else if ((strcmp(tokens[0], "cd") == 0) && (tokens[1] != NULL)) {
       if (chdir(tokens[1]) != -1) {
       } else {
         perror(NULL); // print the error
