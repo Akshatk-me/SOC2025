@@ -69,21 +69,20 @@ int execute(char **tokens, int RunBackground) {
     // enable the below if you don't want CTRL-C to close the shell
     // signal(SIGINT, signal_handler);
 
-    // loop to kill any zombie process from foreground + the forked process
-    while ((pid = waitpid(-1, &ws, WNOHANG)) > 0) {
-      if (ws != 0) {
-        printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
-      }
-    }
-
     if (RunBackground == 0) {
 
       // printf("WILL be waiting for %d\n", rc);
-      wait(&ws);
+      waitpid(rc, &ws, 0);
       if (ws != 0) {
         printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
       }
 
+      // loop to kill any zombie process from background + the forked process
+      while ((pid = waitpid(-1, &ws, WNOHANG)) > 0) {
+        if (ws != 0) {
+          printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
+        }
+      }
       // printf("WAS be waiting for %d\n", rc);
 
     } else {
