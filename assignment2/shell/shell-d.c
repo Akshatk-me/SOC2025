@@ -49,6 +49,7 @@ char **tokenize(char *line) {
 
 int execute(char **tokens) {
   int ws;
+  int *proc_list = (int *)malloc(100 * sizeof(int));
   int rc = fork();
 
   if (rc < 0) {
@@ -80,6 +81,7 @@ int main(int argc, char *argv[]) {
   char line[MAX_INPUT_SIZE];
   char **tokens;
   char cd[] = "cd";
+  char EXIT_CMD[] = "exit";
   int i;
   char *cwd = (char *)malloc(257 * sizeof(char));
   /*
@@ -120,6 +122,14 @@ int main(int argc, char *argv[]) {
         perror(NULL); // if error print it
       }
 
+    } else if (strcmp(tokens[0], EXIT_CMD) == 0) {
+      // terminate all background process
+
+      // kill(__pid_t pid, SIGINT);
+
+      // clean up internal state (free the allocated memory)
+      // Memory will be cleaned up after this conditional statement is exited
+
     } else {
       execute(tokens);
     }
@@ -129,8 +139,8 @@ int main(int argc, char *argv[]) {
       free(tokens[i]);
     }
     free(tokens);
+    free(cwd);
   }
 
-  free(cwd);
   return 0;
 }
