@@ -11,11 +11,32 @@
 #define MAX_TOKEN_SIZE 64
 #define MAX_NUM_TOKENS 64
 
+static int BackgroundProcessList[255];
+static int NumBackgroundProcess = 0;
+
 // signal handler
 volatile sig_atomic_t gSignalstatus;
 static void signal_handler(int signal) {
   gSignalstatus = signal;
   printf("Received signal: %d\n", signal);
+}
+
+int removeProcess(int pid) {
+  int i;
+  // delete the element matching the PID
+
+  for (i = 0; BackgroundProcessList[i] != pid; i++) {
+    // pass
+  }
+  // shift all the rest elements to one left
+  if (BackgroundProcessList[i - 1] == pid) {
+    for (int n = i; n < NumBackgroundProcess; n++) {
+      BackgroundProcessList[n] = BackgroundProcessList[n + 1];
+    }
+
+    NumBackgroundProcess--;
+  }
+  return 0;
 }
 
 /* Splits the string by space and returns the array of tokens
@@ -65,21 +86,17 @@ int execute(char **tokens, int RunBackground) {
   } else {
 
     // enable the below if you don't want CTRL-C to close the shell
-    // signal(SIGINT, signal_handler);
+    signal(SIGINT, signal_handler);
 
     if (RunBackground == 0) {
-
-      // printf("WILL be waiting for %d\n", rc);
       waitpid(rc, &ws, 0);
       if (ws != 0) {
         printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
       }
-
-      // printf("WAS be waiting for %d\n", rc);
-
     } else {
-      // the below will take care to eliminate the child when it dies
-      // signal(SIGCHLD, signal_handler);
+      setpgid(rc, rc); // sets the background process group as different
+      BackgroundProcessList[NumBackgroundProcess] = rc;
+      NumBackgroundProcess++;
       printf("Running in Background: %d\n", rc);
     }
   }
@@ -91,9 +108,9 @@ int main(int argc, char *argv[]) {
   char line[MAX_INPUT_SIZE];
   char **tokens;
   int i;
-  int ws, pid;
   int NUM_TOKENS;
   char *cwd = (char *)malloc(257 * sizeof(char));
+  int ws, pid;
   /*
    */
 
@@ -101,7 +118,10 @@ int main(int argc, char *argv[]) {
 
     // loop to kill any zombie process from background + the forked process
     while ((pid = waitpid(-1, &ws, WNOHANG)) > 0) {
-      if (ws != 0) {
+      if (ws == 0) {
+        // do stuff
+        removeProcess(pid);
+      } else {
         printf("EXITSTATUS: %d\n", WEXITSTATUS(ws));
       }
     }
@@ -146,6 +166,17 @@ int main(int argc, char *argv[]) {
       // do background execution
       tokens[i - 1] = NULL;
       execute(tokens, 1);
+
+    } else if (strcmp(tokens[0], "exit") == 0) {
+      // kill all background process
+      printf("Exiting\n");
+      for (i = 0; BackgroundProcessList[i] != 0; i++) {
+        printf("Killing %d\n", BackgroundProcessList[i]);
+        kill(BackgroundProcessList[i], SIGKILL);
+      }
+
+      // exit the loop and free the memory after that
+      break;
 
     } else {
       // do normal foreground execution
