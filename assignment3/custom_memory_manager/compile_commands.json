@@ -1,0 +1,50 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-DUSE_BITWISE",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-o",
+      "bitwise",
+      "main.cpp"
+    ],
+    "directory": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager",
+    "file": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager/main.cpp",
+    "output": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager/bitwise"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-DUSE_BITWISE",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-o",
+      "bitwise",
+      "mem_manage.cpp"
+    ],
+    "directory": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager",
+    "file": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager/mem_manage.cpp",
+    "output": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager/bitwise"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-DUSE_BITWISE",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-o",
+      "bitwise",
+      "mem_manage_bitwise.cpp"
+    ],
+    "directory": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager",
+    "file": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager/mem_manage_bitwise.cpp",
+    "output": "/home/akshatk/Code/projects/SOC2025/assignment3/custom_memory_manager/bitwise"
+  }
+]

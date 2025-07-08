@@ -1,27 +1,29 @@
-CFLAGS = -Wno-implicit-function-decleration -g 
+CFLAGS =  -g  -Wall -Wextra
 CC = g++ 
 
-all: final 
+SRC_BASIC = main.cpp mem_manage.cpp mem_manage_basic.cpp
+SRC_BITWISE = main.cpp mem_manage.cpp mem_manage_bitwise.cpp
 
+all: basic bitwise
 
 # make will compile main.o and mem_manage.o before producing final if main.o and mem_manage.o are not found.
 # use @ to run the command put not print it to screen
 # Make files don't take space as sperators. They need TAB.
-final: main.o mem_manage.o
+basic: $(SRC_BASIC)
 	@echo "Linking and producing the final application"
-	$(CC) $(CFLAGS) main.o mem_manage.o -o final
-	@chmod +x final
+ 	# \$^ are the prereq, \$@ is the target
+	$(CC) -DUSE_BASIC $(CFLAGS) $^ -o $@ 
+	@chmod +x basic 
 
-main.o: main.cpp
-	@echo "Compiling the main file"
-	$(CC) $(CFLAGS) -c $<
+bitwise: $(SRC_BITWISE)
+	@echo "Linking and producing the final application"
+	 # \$^ are the prereq, \$@ is the target
+	$(CC) -DUSE_BITWISE $(CFLAGS) $^ -o $@ 
+	@chmod +x bitwise 
 
-mem_manage.o: mem_manage.cpp
-	@echo "Compiling the mem_manage file"
-	$(CC) $(CFLAGS) -c $<
 
 clean:
 	@echo "Removing everything but the source file"
-	rm main.o mem_manage.o final
+	rm basic bitwise
 
 #to create a library of somlib
