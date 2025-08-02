@@ -1,9 +1,10 @@
 #pragma once
-#include "Config.h"
+#include "Config.hpp"
 #include "Memory.hpp"
 #include <stdint.h>
 #include <string>
 
+// For VA to PA translation
 struct MMU {
 public:
   MMU(const Memory &memory, const Config &cfg);

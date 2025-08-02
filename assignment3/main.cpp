@@ -1,7 +1,15 @@
-#include "Config.h"
+#include "Config.hpp"
 #include "MMU.hpp"
 #include "Memory.hpp"
 #include <iostream>
+
+Config cfg = {.addressWidth = 32,
+              .pageSize = 4096,
+              .pageTableLevels = 2,
+              .bitsPerLevel = {10, 10}};
+
+// &cf = cfg. so cf and cfg have the same pointer
+Memory MemoryInstance = Memory(cfg);
 
 class Complex {
 public:

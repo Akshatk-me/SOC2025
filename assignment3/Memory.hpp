@@ -1,5 +1,5 @@
 #pragma once
-#include "Config.h"
+#include "Config.hpp"
 #include <cstdint>
 #include <unordered_map>
 #include <vector>
